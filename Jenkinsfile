@@ -24,11 +24,11 @@ pipeline {
       steps { bat 'mvn test' }
     }
     stage('Docker Cleanup') {
-      steps {
-        bat 'docker rm -f hapi-fhir || true'
-        bat 'docker rmi hapi-fhir-jpaserver:latest || true'
-      }
-    }
+  steps {
+    bat 'docker rm -f hapi-fhir 2>nul & exit /b 0'
+    bat 'docker rmi hapi-fhir-jpaserver:latest 2>nul & exit /b 0'
+  }
+}
     stage('Docker Build & Run') {
       steps {
         bat 'docker build -t hapi-fhir-jpaserver:latest .'
