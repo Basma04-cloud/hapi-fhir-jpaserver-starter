@@ -35,5 +35,22 @@ pipeline {
         bat 'docker run -d -p 8090:8080 --name hapi-fhir hapi-fhir-jpaserver:latest'
       }
     }
+    stage('Trivy Security Scan') {
+      steps {
+        bat 'docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image --exit-code 0 --severity HIGH,CRITICAL basma04/hapi-fhir-jpaserver:latest'
+      }
+    }
   }
+  post {
+    always {
+      echo 'Pipeline terminé'
+    }
+    success {
+      echo 'Pipeline réussi !'
+    }
+    failure {
+      echo 'Pipeline échoué !'
+    }
+  }
+  
 }
